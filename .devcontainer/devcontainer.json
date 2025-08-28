@@ -1,0 +1,23 @@
+{
+	"name": "DOS Wasm X Build Environment",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": ".."
+	},
+	"workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+	"workspaceFolder": "/workspace",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-vscode.cmake-tools"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	},
+	"remoteEnv": {
+		"PATH": "/emsdk:/emsdk/upstream/emscripten:/emsdk/upstream/bin:${containerEnv:PATH}"
+	}
+}
