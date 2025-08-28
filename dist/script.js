@@ -120,6 +120,20 @@ class MyClass {
             this.rivetsData.hasCloud = true;
         }
 
+        if (this.rivetsData.settings.EXPORTDIR)
+        {
+            let exportDir = this.rivetsData.settings.EXPORTDIR;
+            // Remove leading slashes or drive letters to ensure relative path
+            exportDir = exportDir.replace(/^[A-Za-z]:/, "").replace(/^[\\\/]+/, "")
+            // Replace forward slash with backslash
+            exportDir = exportDir.replace("/", "\\");
+            this.exportDirectory = exportDir;
+        }
+        else
+        {
+            this.exportDirectory = "export";
+        }
+
         if (window["ROMLIST"].length > 0)
         {
             window["ROMLIST"].forEach(rom => {
@@ -577,8 +591,8 @@ class MyClass {
             {
                 this.exportFilesRequested = false;
                 setTimeout(() => {
-                    let filearray = Module.FS.readFile("/export.zip");    
-                    var file = new File([filearray], "export.zip", {type: "text/plain; charset=x-user-defined"});
+                    let filearray = Module.FS.readFile("/" + this.exportDirectory.replace("\\", "/") + ".zip");
+                    var file = new File([filearray], this.exportDirectory.split("\\").pop() + ".zip", {type: "text/plain; charset=x-user-defined"});
                     saveAs(file);
                     Module._neil_clear_autoexec();
                 }, 500);
@@ -1058,11 +1072,13 @@ class MyClass {
         this.changeFloppyDisk = Module.cwrap('neil_change_floppy', null, ['string']);
         this.loadFloppyDisk = Module.cwrap('neil_load_floppy', null, ['string']);
         this.sendDosCommands = Module.cwrap('neil_send_dos_commands', null, ['string']);
+        this.setExportDirectory = Module.cwrap('neil_set_export_directory', null, ['string']);
         this.sendMouseMovement = Module.cwrap('neil_send_mouse_movement', null, ['number','number']);
         this.sendDosControls = Module.cwrap('neil_send_dos_controls', null, 
             ['string','string','string','array','number','string','string']); //arrays are always unsigned byte arrays
 
         Module.callMain();
+        this.setExportDirectory(this.exportDirectory);
         this.configureEmulator();
         this.findSavestateInDatabase();
         this.rivetsData.beforeEmulatorStarted = false;

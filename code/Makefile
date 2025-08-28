@@ -303,6 +303,7 @@ main.js: $(FILES)
 	'_neil_load_floppy', \
 	'_neil_send_dos_commands', \
 	'_neil_export_files', \
+	'_neil_set_export_directory', \
 	'_neil_clear_autoexec', \
 	'_neil_exit_to_dos', \
 	'_neil_toggle_pause', \

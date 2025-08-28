@@ -87,6 +87,7 @@ bool loadFloppyRequested = false;
 bool saveStateRequested = false;
 bool loadStateRequested = false;
 bool exportFilesRequested = false;
+char export_directory_name[50] = "export";
 bool exitToDosRequested = false;
 bool togglePauseRequested = false;
 char change_iso_filename[250];
@@ -10454,8 +10455,8 @@ void neil_check_requested()
 
         char mountCommands[1000];
 
-        sprintf(mountCommands, "mount e .\r\n%s%sc:\r\ncd export\r\nzip -r E:\\export.zip *.*\r\necho DONE\r\n",
-            fat_drive_mount, iso_drive_mount);
+        sprintf(mountCommands, "mount e .\r\n%s%sc:\r\nif not exist %s\\nul md %s\r\ncd %s\r\nzip -r E:\\%s.zip *.*\r\necho DONE\r\n",
+            fat_drive_mount, iso_drive_mount, export_directory_name, export_directory_name, export_directory_name, export_directory_name);
 
         section->data = mountCommands;
 
@@ -10692,6 +10693,12 @@ extern "C" {
     void neil_export_files()
     {
         exportFilesRequested = true;
+    }
+    void neil_set_export_directory(char* dirname)
+    {
+        if (dirname && strlen(dirname) < 50) {
+            sprintf(export_directory_name, "%.49s", dirname);
+        }
     }
 
     void neil_clear_autoexec()

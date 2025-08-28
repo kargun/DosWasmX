@@ -1,6 +1,7 @@
 var DOSWASMSETTINGS = {
     CLOUDSAVEURL: "",
-    DEFAULTIMG: ""
+    DEFAULTIMG: "",
+    EXPORTDIR: "" // Default: export
 }
 
 var rando = Math.floor(Math.random() * Math.floor(100000));
